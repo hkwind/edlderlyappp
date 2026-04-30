@@ -1,0 +1,42 @@
+:root {
+  color-scheme: light;
+  font-family: "Noto Sans TC", "Segoe UI", sans-serif;
+  line-height: 1.5;
+  font-weight: 500;
+
+  --color-bg: #f6f0de;
+  --color-surface: #fffdf7;
+  --color-surface-strong: #ffffff;
+  --color-text: #17352a;
+  --color-muted: #4d665b;
+  --color-border: #b9cfbf;
+  --color-primary: #1b6b50;
+  --color-primary-strong: #124d39;
+  --color-accent: #e3b23c;
+  --color-good: #216641;
+  --color-alert: #a43d2f;
+  --color-shadow: rgba(26, 51, 42, 0.14);
+
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.25rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+
+  --text-xs: 0.9rem;
+  --text-sm: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.9rem;
+  --text-xxl: 2.4rem;
+
+  background:
+    radial-gradient(circle at top, rgba(227, 178, 60, 0.18), transparent 35%),
+    linear-gradient(180deg, #f8f4e8 0%, #f1e8cf 100%);
+  color: var(--color-text);
+}
