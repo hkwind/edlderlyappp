@@ -3,8 +3,8 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import { CaregiverDestinationsPage } from "../src/features/caregiver/CaregiverDestinationsPage";
-import { CaregiverMedicinePage } from "../src/features/medicine/CaregiverMedicinePage";
 import { CaregiverCustomSlotsPage } from "../src/features/custom-grid/CaregiverCustomSlotsPage";
+import { CaregiverMedicinePage } from "../src/features/medicine/CaregiverMedicinePage";
 
 function Wrapper({ children }: { children: ReactNode }) {
   return (
@@ -27,17 +27,20 @@ describe("Caregiver edit pages", () => {
     expect(screen.getByRole("button", { name: "儲存地點" })).toBeInTheDocument();
   });
 
-  it("renders the medicine editor", () => {
+  it("renders the medicine editor with alert controls", () => {
     render(<CaregiverMedicinePage />, { wrapper: Wrapper });
 
     expect(screen.getByText("管理食藥提醒")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "儲存提醒" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "測試提醒" })).toBeInTheDocument();
+    expect(screen.getByLabelText("啟用鬧鐘／通知")).toBeInTheDocument();
   });
 
-  it("renders the custom slot editor", () => {
+  it("renders the custom slot editor with home visibility controls", () => {
     render(<CaregiverCustomSlotsPage />, { wrapper: Wrapper });
 
     expect(screen.getByText("管理自訂格")).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "儲存自訂格" })).toHaveLength(2);
+    expect(screen.getAllByLabelText("在長者主頁顯示")).toHaveLength(2);
   });
 });

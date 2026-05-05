@@ -7,6 +7,7 @@ export const mockReminders: MedicineReminder[] = [
     time: "08:00",
     dosageNote: "早餐後 1 粒",
     active: true,
+    alertEnabled: true,
     state: "done"
   },
   {
@@ -15,6 +16,7 @@ export const mockReminders: MedicineReminder[] = [
     time: "13:00",
     dosageNote: "午餐後 1 粒",
     active: true,
+    alertEnabled: true,
     state: "upcoming"
   },
   {
@@ -23,6 +25,7 @@ export const mockReminders: MedicineReminder[] = [
     time: "20:00",
     dosageNote: "如痛楚明顯先服用",
     active: false,
+    alertEnabled: false,
     state: "missed"
   }
 ];

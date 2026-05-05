@@ -6,11 +6,12 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { useAppStore } from "../src/app/store";
 import { mockCustomSlots } from "../src/data/mockCustomSlots";
 import { mockDestinations } from "../src/data/mockDestinations";
-import { mockPatient, mockContacts } from "../src/data/mockPatient";
+import { mockContacts, mockPatient } from "../src/data/mockPatient";
 import { mockReminders } from "../src/data/mockReminders";
 import { mockDeviceStatus, mockLocationStatus } from "../src/data/mockStatus";
 import { CallPage } from "../src/features/calling/CallPage";
 import { CaregiverDashboardPage } from "../src/features/caregiver/CaregiverDashboardPage";
+import { ElderHomePage } from "../src/features/elder-home/ElderHomePage";
 import { ElderMedicinePage } from "../src/features/medicine/ElderMedicinePage";
 
 function Wrapper({ children }: { children: ReactNode }) {
@@ -34,7 +35,8 @@ beforeEach(() => {
     reminders: mockReminders,
     customSlots: mockCustomSlots,
     locationStatus: mockLocationStatus,
-    deviceStatus: mockDeviceStatus
+    deviceStatus: mockDeviceStatus,
+    activeMedicineAlert: null
   });
 });
 
@@ -48,6 +50,15 @@ describe("Phase 3 interactions", () => {
 
     expect(screen.getAllByText("已完成").length).toBeGreaterThan(0);
     expect(screen.getAllByRole("button", { name: "改回未完成" }).length).toBeGreaterThan(0);
+  });
+
+  it("shows an in-app medicine alert when a reminder is triggered", () => {
+    useAppStore.getState().triggerTestMedicineAlert("med-2");
+
+    render(<ElderHomePage />, { wrapper: Wrapper });
+
+    expect(screen.getByText("食藥提醒")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "查看提醒" })).toBeInTheDocument();
   });
 
   it("shows a call confirmation summary after choosing a family contact", async () => {

@@ -15,6 +15,12 @@ import type {
   MedicineReminder
 } from "../types/domain";
 
+interface ActiveMedicineAlert {
+  reminderId: string;
+  triggerSource: "schedule" | "test";
+  triggeredAt: string;
+}
+
 interface AppState {
   patient: ElderProfile;
   contacts: Contact[];
@@ -23,12 +29,16 @@ interface AppState {
   customSlots: CustomSlotConfig[];
   locationStatus: LocationStatus;
   deviceStatus: DeviceStatus;
+  activeMedicineAlert: ActiveMedicineAlert | null;
   saveReminder: (reminder: MedicineReminder) => void;
   saveDestination: (destination: Destination) => void;
   saveCustomSlot: (slot: CustomSlotConfig) => void;
   deleteReminder: (reminderId: string) => void;
   deleteDestination: (destinationId: string) => void;
   updateReminderState: (reminderId: string, state: MedicineReminder["state"]) => void;
+  syncMedicineAlerts: (now?: Date) => void;
+  triggerTestMedicineAlert: (reminderId: string) => void;
+  clearActiveMedicineAlert: () => void;
   importPairingBundle: (bundle: PairingBundle) => void;
 }
 
@@ -40,6 +50,7 @@ export const useAppStore = create<AppState>((set) => ({
   customSlots: mockCustomSlots,
   locationStatus: mockLocationStatus,
   deviceStatus: mockDeviceStatus,
+  activeMedicineAlert: null,
   saveReminder: (reminder) =>
     set((state) => ({
       reminders: saveById(state.reminders, reminder)
@@ -65,10 +76,52 @@ export const useAppStore = create<AppState>((set) => ({
     })),
   updateReminderState: (reminderId, nextState) =>
     set((state) => ({
+      activeMedicineAlert:
+        nextState === "done" && state.activeMedicineAlert?.reminderId === reminderId
+          ? null
+          : state.activeMedicineAlert,
       reminders: state.reminders.map((reminder) =>
         reminder.id === reminderId ? { ...reminder, state: nextState } : reminder
       )
     })),
+  syncMedicineAlerts: (now = new Date()) =>
+    set((state) => {
+      if (state.activeMedicineAlert) {
+        return {};
+      }
+
+      // TODO: Replace this in-app due-time check with real OS alarm / notification scheduling.
+      const dueReminder = state.reminders.find((reminder) => isReminderDue(reminder, now));
+
+      if (!dueReminder) {
+        return {};
+      }
+
+      const todayKey = getDateKey(now);
+
+      return {
+        activeMedicineAlert: {
+          reminderId: dueReminder.id,
+          triggerSource: "schedule",
+          triggeredAt: now.toISOString()
+        },
+        reminders: state.reminders.map((reminder) =>
+          reminder.id === dueReminder.id ? { ...reminder, lastAlertDate: todayKey } : reminder
+        )
+      };
+    }),
+  triggerTestMedicineAlert: (reminderId) =>
+    set((state) => ({
+      activeMedicineAlert: {
+        reminderId,
+        triggerSource: "test",
+        triggeredAt: new Date().toISOString()
+      }
+    })),
+  clearActiveMedicineAlert: () =>
+    set({
+      activeMedicineAlert: null
+    }),
   importPairingBundle: (bundle) =>
     set({
       patient: bundle.patient,
@@ -77,7 +130,8 @@ export const useAppStore = create<AppState>((set) => ({
       reminders: bundle.reminders,
       customSlots: bundle.customSlots,
       locationStatus: bundle.locationStatus,
-      deviceStatus: bundle.deviceStatus
+      deviceStatus: bundle.deviceStatus,
+      activeMedicineAlert: null
     })
 }));
 
@@ -106,4 +160,26 @@ function saveDestinationList(destinations: Destination[], nextDestination: Desti
     : destinations;
 
   return saveById(cleanedDestinations, nextDestination);
+}
+
+function isReminderDue(reminder: MedicineReminder, now: Date) {
+  if (!reminder.active || !reminder.alertEnabled || reminder.state === "done") {
+    return false;
+  }
+
+  const [hours, minutes] = reminder.time.split(":").map((value) => Number(value));
+
+  if (Number.isNaN(hours) || Number.isNaN(minutes)) {
+    return false;
+  }
+
+  const todayKey = getDateKey(now);
+  const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
+  const reminderTotalMinutes = hours * 60 + minutes;
+
+  return currentTotalMinutes >= reminderTotalMinutes && reminder.lastAlertDate !== todayKey;
+}
+
+function getDateKey(now: Date) {
+  return now.toISOString().slice(0, 10);
 }

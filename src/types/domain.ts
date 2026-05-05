@@ -42,13 +42,16 @@ export interface MedicineReminder {
   time: string;
   dosageNote: string;
   active: boolean;
+  alertEnabled: boolean;
   state: MedicineState;
+  lastAlertDate?: string;
 }
 
 export interface CustomSlotConfig {
   slot: "A" | "B";
   label: string;
   actionType: CustomActionType;
+  showOnHome: boolean;
   targetId?: string;
   note?: string;
 }

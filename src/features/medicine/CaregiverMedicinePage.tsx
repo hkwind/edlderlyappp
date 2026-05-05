@@ -12,6 +12,7 @@ function createBlankReminder(): MedicineReminder {
     time: "08:00",
     dosageNote: "",
     active: true,
+    alertEnabled: true,
     state: "upcoming"
   };
 }
@@ -28,6 +29,7 @@ export function CaregiverMedicinePage() {
   const reminders = useAppStore((state) => state.reminders);
   const saveReminder = useAppStore((state) => state.saveReminder);
   const deleteReminder = useAppStore((state) => state.deleteReminder);
+  const triggerTestMedicineAlert = useAppStore((state) => state.triggerTestMedicineAlert);
   const [selectedId, setSelectedId] = useState(reminders[0]?.id ?? "");
   const [draft, setDraft] = useState<MedicineReminder>(reminders[0] ?? createBlankReminder());
   const [feedback, setFeedback] = useState("");
@@ -44,7 +46,7 @@ export function CaregiverMedicinePage() {
     <AppShell
       mode="caregiver"
       title="管理食藥提醒"
-      subtitle="用簡單格式設定今日提醒。"
+      subtitle="設定時間後，原型會顯示應用程式內提醒。"
       actions={
         <Link className="secondary-button" to="/caregiver">
           返回總覽
@@ -104,7 +106,7 @@ export function CaregiverMedicinePage() {
             </label>
 
             <label className="field">
-              <span>時間</span>
+              <span>提醒時間</span>
               <input
                 type="time"
                 value={draft.time}
@@ -155,9 +157,35 @@ export function CaregiverMedicinePage() {
               <span>啟用提醒</span>
             </label>
 
+            <label className="checkbox-field">
+              <input
+                checked={draft.alertEnabled}
+                type="checkbox"
+                onChange={(event) =>
+                  setDraft((current) => ({ ...current, alertEnabled: event.target.checked }))
+                }
+              />
+              <span>啟用鬧鐘／通知</span>
+            </label>
+
+            <p className="card-meta">
+              TODO: 目前是原型的應用程式內提醒，之後可在這裡接上作業系統排程通知。
+            </p>
+
             <div className="inline-actions">
               <button className="primary-button" type="submit">
                 儲存提醒
+              </button>
+              <button
+                className="secondary-button"
+                type="button"
+                onClick={() => {
+                  saveReminder(draft);
+                  triggerTestMedicineAlert(draft.id);
+                  setFeedback("已發出測試提醒，長者版會看到食藥提示。");
+                }}
+              >
+                測試提醒
               </button>
               {reminders.some((reminder) => reminder.id === draft.id) ? (
                 <button

@@ -23,12 +23,14 @@ export function CaregiverCustomSlotsPage() {
       slot: "A",
       label: "自訂 A",
       actionType: "showNote",
+      showOnHome: false,
       note: ""
     },
     B: customSlots.find((slot) => slot.slot === "B") ?? {
       slot: "B",
       label: "自訂 B",
       actionType: "showNote",
+      showOnHome: false,
       note: ""
     }
   });
@@ -47,7 +49,7 @@ export function CaregiverCustomSlotsPage() {
     <AppShell
       mode="caregiver"
       title="管理自訂格"
-      subtitle="設定 A、B 兩個快捷功能。"
+      subtitle="設定 A、B 兩個快捷功能，預設不會在長者主頁顯示。"
       actions={
         <Link className="secondary-button" to="/caregiver">
           返回總覽
@@ -74,6 +76,15 @@ export function CaregiverCustomSlotsPage() {
                     value={draft.label}
                     onChange={(event) => updateDraft(slot, { label: event.target.value })}
                   />
+                </label>
+
+                <label className="checkbox-field">
+                  <input
+                    checked={draft.showOnHome}
+                    type="checkbox"
+                    onChange={(event) => updateDraft(slot, { showOnHome: event.target.checked })}
+                  />
+                  <span>在長者主頁顯示</span>
                 </label>
 
                 <label className="field">

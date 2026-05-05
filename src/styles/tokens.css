@@ -1,24 +1,33 @@
 :root {
   color-scheme: light;
-  font-family: "Noto Sans TC", "Segoe UI", sans-serif;
+  font-family: "Noto Sans TC", Inter, "Segoe UI", sans-serif;
   line-height: 1.5;
   font-weight: 500;
 
-  --color-bg: #f6f0de;
-  --color-surface: #fffdf7;
+  --color-bg: #fffaf0;
+  --color-surface: #fffaf0;
+  --color-surface-soft: #faf5e8;
+  --color-surface-card: #f5f0e0;
   --color-surface-strong: #ffffff;
-  --color-text: #17352a;
-  --color-muted: #4d665b;
-  --color-border: #b9cfbf;
-  --color-primary: #1b6b50;
-  --color-primary-strong: #124d39;
-  --color-accent: #e3b23c;
-  --color-good: #216641;
-  --color-alert: #a43d2f;
-  --color-shadow: rgba(26, 51, 42, 0.14);
+  --color-text: #0a0a0a;
+  --color-text-strong: #1a1a1a;
+  --color-muted: #5f5a54;
+  --color-border: #e5e0d4;
+  --color-primary: #0a0a0a;
+  --color-primary-strong: #0a0a0a;
+  --color-accent: #e8b94a;
+  --color-good: #22c55e;
+  --color-alert: #ef4444;
+  --color-shadow: rgba(10, 10, 10, 0.08);
+  --color-teal: #1a3a3a;
+  --color-pink: #ff4d8b;
+  --color-lavender: #b8a4ed;
+  --color-peach: #ffb084;
+  --color-ochre: #e8b94a;
+  --color-mint: #a4d4c5;
 
   --radius-lg: 24px;
-  --radius-md: 18px;
+  --radius-md: 16px;
   --radius-sm: 12px;
 
   --space-1: 0.5rem;
@@ -28,15 +37,15 @@
   --space-5: 1.5rem;
   --space-6: 2rem;
 
-  --text-xs: 0.9rem;
+  --text-xs: 0.8125rem;
   --text-sm: 1rem;
   --text-md: 1.125rem;
-  --text-lg: 1.375rem;
-  --text-xl: 1.9rem;
-  --text-xxl: 2.4rem;
+  --text-lg: 1.5rem;
+  --text-xl: 2rem;
+  --text-xxl: 2.5rem;
 
   background:
-    radial-gradient(circle at top, rgba(227, 178, 60, 0.18), transparent 35%),
-    linear-gradient(180deg, #f8f4e8 0%, #f1e8cf 100%);
+    radial-gradient(circle at top, rgba(232, 185, 74, 0.18), transparent 35%),
+    linear-gradient(180deg, #fffaf0 0%, #faf5e8 100%);
   color: var(--color-text);
 }
