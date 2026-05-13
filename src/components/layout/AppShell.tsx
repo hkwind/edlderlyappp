@@ -2,6 +2,7 @@ import { useEffect, type PropsWithChildren, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAppStore } from "../../app/store";
 import { AppIcon } from "../icons/AppIcon";
+import { CaregiverBottomNav } from "./CaregiverBottomNav";
 
 interface AppShellProps extends PropsWithChildren {
   title: string;
@@ -26,9 +27,19 @@ export function AppShell({
   const activeMedicineAlert = useAppStore((state) => state.activeMedicineAlert);
   const syncMedicineAlerts = useAppStore((state) => state.syncMedicineAlerts);
   const clearActiveMedicineAlert = useAppStore((state) => state.clearActiveMedicineAlert);
+  const elderUiPreferences = useAppStore((state) => state.elderUiPreferences);
   const activeReminder = reminders.find((reminder) => reminder.id === activeMedicineAlert?.reminderId);
   const shouldShowTopbar = showTopbar ?? mode === "caregiver";
   const shouldShowAlertBanner = mode === "elder" && (pathname === "/" || pathname === "/medicine");
+  const shellClassName = [
+    "app-shell",
+    `app-shell--${mode}`,
+    mode === "elder" && elderUiPreferences.largeText ? "app-shell--elder-large-text" : "",
+    mode === "elder" && elderUiPreferences.highContrast ? "app-shell--elder-high-contrast" : "",
+    mode === "elder" && elderUiPreferences.colorMode === "vivid" ? "app-shell--elder-vivid" : ""
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   useEffect(() => {
     if (mode !== "elder") {
@@ -45,7 +56,7 @@ export function AppShell({
   }, [mode, syncMedicineAlerts]);
 
   return (
-    <div className={`app-shell app-shell--${mode}`}>
+    <div className={shellClassName}>
       {shouldShowTopbar ? (
         <header className="app-topbar">
           <Link className="app-brand" to="/">
@@ -92,6 +103,7 @@ export function AppShell({
 
         {children}
       </main>
+      {mode === "caregiver" ? <CaregiverBottomNav /> : null}
     </div>
   );
 }

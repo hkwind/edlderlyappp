@@ -11,6 +11,7 @@ import type {
   Destination,
   DeviceStatus,
   ElderProfile,
+  ElderUiPreferences,
   LocationStatus,
   MedicineReminder
 } from "../types/domain";
@@ -30,6 +31,7 @@ interface AppState {
   locationStatus: LocationStatus;
   deviceStatus: DeviceStatus;
   activeMedicineAlert: ActiveMedicineAlert | null;
+  elderUiPreferences: ElderUiPreferences;
   saveContact: (contact: Contact) => void;
   saveReminder: (reminder: MedicineReminder) => void;
   saveDestination: (destination: Destination) => void;
@@ -40,6 +42,7 @@ interface AppState {
   syncMedicineAlerts: (now?: Date) => void;
   triggerTestMedicineAlert: (reminderId: string) => void;
   clearActiveMedicineAlert: () => void;
+  updateElderUiPreferences: (nextPreferences: Partial<ElderUiPreferences>) => void;
   importPairingBundle: (bundle: PairingBundle) => void;
 }
 
@@ -52,6 +55,11 @@ export const useAppStore = create<AppState>((set) => ({
   locationStatus: mockLocationStatus,
   deviceStatus: mockDeviceStatus,
   activeMedicineAlert: null,
+  elderUiPreferences: {
+    largeText: false,
+    highContrast: false,
+    colorMode: "warm"
+  },
   saveContact: (contact) =>
     set((state) => ({
       contacts: saveById(state.contacts, contact)
@@ -127,6 +135,13 @@ export const useAppStore = create<AppState>((set) => ({
     set({
       activeMedicineAlert: null
     }),
+  updateElderUiPreferences: (nextPreferences) =>
+    set((state) => ({
+      elderUiPreferences: {
+        ...state.elderUiPreferences,
+        ...nextPreferences
+      }
+    })),
   importPairingBundle: (bundle) =>
     set({
       patient: bundle.patient,

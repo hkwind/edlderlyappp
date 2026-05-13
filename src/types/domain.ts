@@ -74,3 +74,9 @@ export interface CaregiverSummary {
   savedDestinationCount: number;
   customActionCount: number;
 }
+
+export interface ElderUiPreferences {
+  largeText: boolean;
+  highContrast: boolean;
+  colorMode: "warm" | "vivid";
+}

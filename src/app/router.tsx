@@ -3,6 +3,8 @@ import { CallPage } from "../features/calling/CallPage";
 import { CaregiverContactsPage } from "../features/caregiver/CaregiverContactsPage";
 import { CaregiverDashboardPage } from "../features/caregiver/CaregiverDashboardPage";
 import { CaregiverDestinationsPage } from "../features/caregiver/CaregiverDestinationsPage";
+import { CaregiverSettingsPage } from "../features/caregiver/CaregiverSettingsPage";
+import { CaregiverUpdatesPage } from "../features/caregiver/CaregiverUpdatesPage";
 import { CustomActionPage } from "../features/custom-grid/CustomActionPage";
 import { CaregiverCustomSlotsPage } from "../features/custom-grid/CaregiverCustomSlotsPage";
 import { ElderHomePage } from "../features/elder-home/ElderHomePage";
@@ -47,6 +49,14 @@ export const router = createBrowserRouter([
   {
     path: "/caregiver",
     element: <CaregiverDashboardPage />
+  },
+  {
+    path: "/caregiver/updates",
+    element: <CaregiverUpdatesPage />
+  },
+  {
+    path: "/caregiver/settings",
+    element: <CaregiverSettingsPage />
   },
   {
     path: "/caregiver/destinations",

@@ -31,91 +31,73 @@ function getSafeZoneLabel(state: "inside" | "outside" | "unknown") {
 export function CaregiverDashboardPage() {
   const reminders = useAppStore((state) => state.reminders);
   const destinations = useAppStore((state) => state.destinations);
-  const customSlots = useAppStore((state) => state.customSlots);
   const locationStatus = useAppStore((state) => state.locationStatus);
   const deviceStatus = useAppStore((state) => state.deviceStatus);
-  const homeDestination = destinations.find((destination) => destination.isHome);
   const nextReminder = reminders.find((reminder) => reminder.active && reminder.state !== "done");
+  const doneCount = reminders.filter((reminder) => reminder.active && reminder.state === "done").length;
+  const totalActiveCount = reminders.filter((reminder) => reminder.active).length;
+  const homeDestination = destinations.find((destination) => destination.isHome);
 
   return (
     <AppShell
       mode="caregiver"
       title="照顧者總覽"
-      subtitle="快速查看長者設定與模擬狀態。"
-      actions={
-        <Link className="secondary-button" to="/">
-          回長者主頁
-        </Link>
-      }
+      subtitle="一眼查看長者位置、食藥狀態和今日重點。"
     >
       <section className="status-grid">
         <StatusCard
-          title="食藥提醒"
-          value={`${reminders.filter((item) => item.active).length} 項啟用中`}
-          meta="可稍後編輯提醒"
-        />
-        <StatusCard
-          title="已儲存地點"
-          value={`${destinations.length} 個`}
-          meta="包括屋企"
-        />
-        <StatusCard
-          title="自訂功能"
-          value={`${customSlots.length} 個`}
-          meta="A / B 快捷格"
+          title="目前位置"
+          value={locationStatus.currentLocationLabel}
+          meta={`最後更新：${locationStatus.lastUpdated}`}
         />
         <StatusCard
           title="安全區"
           value={getSafeZoneLabel(locationStatus.safeZoneState)}
           tone={getSafeZoneTone(locationStatus.safeZoneState)}
-          meta={`最後更新：${locationStatus.lastUpdated}`}
+          meta="Mock 定位狀態"
         />
         <StatusCard
-          title="目前位置"
-          value={locationStatus.currentLocationLabel}
-          meta="Mock UI only"
+          title="食藥完成"
+          value={`${doneCount}/${totalActiveCount || 0}`}
+          meta={nextReminder ? `下一項：${nextReminder.time} ${nextReminder.medicineName}` : "今天沒有下一項提醒"}
         />
         <StatusCard
-          title="電量"
+          title="手機電量"
           value={`${deviceStatus.batteryLevel}%`}
           meta={`${deviceStatus.connectionLabel}｜${deviceStatus.lastUpdated}`}
         />
       </section>
 
-      <InfoCard title="管理設定">
-        <div className="inline-actions">
-          <Link className="primary-button" to="/caregiver/destinations">
-            管理地點
-          </Link>
-          <Link className="primary-button" to="/caregiver/contacts">
-            管理聯絡人
-          </Link>
-          <Link className="primary-button" to="/caregiver/medicine">
-            管理食藥
-          </Link>
-          <Link className="primary-button" to="/caregiver/custom-slots">
-            管理自訂格
-          </Link>
-        </div>
-      </InfoCard>
-
-      <InfoCard title="快速預覽">
+      <InfoCard title="今日重點">
         <div className="stack-list">
           <div className="list-link-card">
             <strong>屋企地點</strong>
             <span>{homeDestination?.label ?? "未設定"}</span>
-            <span>{homeDestination?.address ?? "可到管理地點設定"}</span>
+            <span>{homeDestination?.address ?? "可到更新頁設定屋企地址"}</span>
           </div>
           <div className="list-link-card">
-            <strong>下一個食藥項目</strong>
-            <span>{nextReminder?.medicineName ?? "未有進行中提醒"}</span>
-            <span>{nextReminder ? `${nextReminder.time}｜${nextReminder.dosageNote}` : "可到管理食藥加入"}</span>
+            <strong>食藥狀態</strong>
+            <span>{doneCount} 項已完成</span>
+            <span>
+              {nextReminder
+                ? `下一項是 ${nextReminder.time} ${nextReminder.medicineName}`
+                : "所有啟用中的提醒都已完成或未設定"}
+            </span>
           </div>
-          <div className="list-link-card">
-            <strong>長者首頁自訂格</strong>
-            <span>{customSlots.map((slot) => `${slot.slot}: ${slot.label}`).join(" ｜ ")}</span>
-            <span>可直接到管理自訂格修改</span>
-          </div>
+        </div>
+      </InfoCard>
+
+      <InfoCard title="快捷控制">
+        <div className="inline-actions">
+          <Link className="primary-button" to="/caregiver/updates">
+            更新資料
+          </Link>
+          <Link className="secondary-button" to="/caregiver/medicine">
+            去食藥編輯
+          </Link>
+          <Link className="secondary-button" to="/">
+            看長者版
+          </Link>
         </div>
       </InfoCard>
     </AppShell>

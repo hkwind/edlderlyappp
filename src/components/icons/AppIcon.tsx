@@ -8,7 +8,9 @@ type IconName =
   | "clock"
   | "help"
   | "qr"
-  | "settings";
+  | "settings"
+  | "dashboard"
+  | "edit";
 
 interface AppIconProps {
   name: IconName;
@@ -110,6 +112,22 @@ export function AppIcon({ name }: AppIconProps) {
           <path d="M18.2 12h1.6" />
           <path d="m7 17 1.2-1.2" />
           <path d="m15.8 8.2 1.2-1.2" />
+        </svg>
+      );
+    case "dashboard":
+      return (
+        <svg {...commonProps}>
+          <path d="M4.5 5.5h6v5h-6Z" />
+          <path d="M13.5 5.5h6v8h-6Z" />
+          <path d="M4.5 13.5h6v5h-6Z" />
+          <path d="M13.5 16.5h6v2h-6Z" />
+        </svg>
+      );
+    case "edit":
+      return (
+        <svg {...commonProps}>
+          <path d="m6 16.8 8.6-8.6 2.8 2.8-8.6 8.6-4 .8Z" />
+          <path d="m13.8 9 2.8-2.8 2.2 2.2-2.8 2.8" />
         </svg>
       );
     default:

@@ -94,8 +94,8 @@ describe("Phase 3 interactions", () => {
   it("shows the caregiver quick preview section", () => {
     render(<CaregiverDashboardPage />, { wrapper: Wrapper });
 
-    expect(screen.getByText("快速預覽")).toBeInTheDocument();
+    expect(screen.getByText("今日重點")).toBeInTheDocument();
     expect(screen.getByText("屋企地點")).toBeInTheDocument();
-    expect(screen.getByText("下一個食藥項目")).toBeInTheDocument();
+    expect(screen.getByText("食藥狀態")).toBeInTheDocument();
   });
 });
