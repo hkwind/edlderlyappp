@@ -8,15 +8,19 @@ interface PageHeaderProps {
 
 export function PageHeader({
   backTo = "/",
-  backLabel = "返回上一頁",
+  backLabel = "返回上頁",
   homeLabel = "回主頁"
 }: PageHeaderProps) {
+  const showsBackLink = backTo !== "/";
+
   return (
     <nav className="page-header-row" aria-label="頁面導覽">
-      <Link className="secondary-button" to={backTo}>
-        {backLabel}
-      </Link>
-      <Link className="secondary-button" to="/">
+      {showsBackLink ? (
+        <Link className="secondary-button" to={backTo}>
+          {backLabel}
+        </Link>
+      ) : null}
+      <Link className={showsBackLink ? "primary-button" : "primary-button page-header-home-only"} to="/">
         {homeLabel}
       </Link>
     </nav>

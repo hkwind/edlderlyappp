@@ -1,5 +1,5 @@
 import { useEffect, type PropsWithChildren, type ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAppStore } from "../../app/store";
 import { AppIcon } from "../icons/AppIcon";
 
@@ -19,13 +19,16 @@ export function AppShell({
   children,
   mode = "elder",
   heroClassName,
-  showTopbar = true
+  showTopbar
 }: AppShellProps) {
+  const { pathname } = useLocation();
   const reminders = useAppStore((state) => state.reminders);
   const activeMedicineAlert = useAppStore((state) => state.activeMedicineAlert);
   const syncMedicineAlerts = useAppStore((state) => state.syncMedicineAlerts);
   const clearActiveMedicineAlert = useAppStore((state) => state.clearActiveMedicineAlert);
   const activeReminder = reminders.find((reminder) => reminder.id === activeMedicineAlert?.reminderId);
+  const shouldShowTopbar = showTopbar ?? mode === "caregiver";
+  const shouldShowAlertBanner = mode === "elder" && (pathname === "/" || pathname === "/medicine");
 
   useEffect(() => {
     if (mode !== "elder") {
@@ -43,7 +46,7 @@ export function AppShell({
 
   return (
     <div className={`app-shell app-shell--${mode}`}>
-      {showTopbar ? (
+      {shouldShowTopbar ? (
         <header className="app-topbar">
           <Link className="app-brand" to="/">
             腦友所依
@@ -63,7 +66,7 @@ export function AppShell({
           </div>
         </section>
 
-        {mode === "elder" && activeReminder ? (
+        {shouldShowAlertBanner && activeReminder ? (
           <section className="alert-banner" aria-label="食藥提醒">
             <span className="alert-banner-icon">
               <AppIcon name="medicine" />

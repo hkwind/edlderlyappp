@@ -26,12 +26,11 @@ export function ElderHomePage() {
     <AppShell
       mode="elder"
       title={`你好，${patient.displayName}`}
-      subtitle="揀一個要做的事，慢慢來就可以。"
       heroClassName="page-hero--home"
       showTopbar={false}
       actions={
         <Link aria-label="設定" className="icon-button" to="/settings">
-          <AppIcon name="settings" />
+          <AppIcon name="person" />
         </Link>
       }
     >

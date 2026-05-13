@@ -17,7 +17,7 @@ export function DestinationDetailPage() {
       title={destination?.label ?? "地點"}
       subtitle="睇住資料，慢慢去。"
     >
-      <PageHeader backTo="/places" />
+      <PageHeader backTo="/places" backLabel="返回地方列表" />
       <section className="elder-task-banner" aria-label="destination guidance">
         <span className="elder-task-banner-icon">
           <AppIcon name="place" />

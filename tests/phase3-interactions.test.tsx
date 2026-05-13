@@ -61,6 +61,24 @@ describe("Phase 3 interactions", () => {
     expect(screen.getByRole("link", { name: "查看提醒" })).toBeInTheDocument();
   });
 
+  it("does not show the medicine alert on unrelated elder pages", () => {
+    useAppStore.getState().triggerTestMedicineAlert("med-2");
+
+    render(
+      <MemoryRouter
+        initialEntries={["/call"]}
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true
+        }}
+      >
+        <CallPage />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText("食藥提醒")).not.toBeInTheDocument();
+  });
+
   it("shows a call confirmation summary after choosing a family contact", async () => {
     const user = userEvent.setup();
 
