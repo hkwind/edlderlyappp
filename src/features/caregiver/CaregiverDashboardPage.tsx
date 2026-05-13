@@ -87,6 +87,9 @@ export function CaregiverDashboardPage() {
           <Link className="primary-button" to="/caregiver/destinations">
             管理地點
           </Link>
+          <Link className="primary-button" to="/caregiver/contacts">
+            管理聯絡人
+          </Link>
           <Link className="primary-button" to="/caregiver/medicine">
             管理食藥
           </Link>

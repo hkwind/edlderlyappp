@@ -30,6 +30,7 @@ interface AppState {
   locationStatus: LocationStatus;
   deviceStatus: DeviceStatus;
   activeMedicineAlert: ActiveMedicineAlert | null;
+  saveContact: (contact: Contact) => void;
   saveReminder: (reminder: MedicineReminder) => void;
   saveDestination: (destination: Destination) => void;
   saveCustomSlot: (slot: CustomSlotConfig) => void;
@@ -51,6 +52,10 @@ export const useAppStore = create<AppState>((set) => ({
   locationStatus: mockLocationStatus,
   deviceStatus: mockDeviceStatus,
   activeMedicineAlert: null,
+  saveContact: (contact) =>
+    set((state) => ({
+      contacts: saveById(state.contacts, contact)
+    })),
   saveReminder: (reminder) =>
     set((state) => ({
       reminders: saveById(state.reminders, reminder)

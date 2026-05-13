@@ -88,6 +88,7 @@ describe("Phase 3 interactions", () => {
 
     expect(screen.getByText("正在準備打電話")).toBeInTheDocument();
     expect(screen.getAllByText("9123 4567").length).toBeGreaterThan(0);
+    expect(screen.getByRole("link", { name: "立即打電話" })).toHaveAttribute("href", "tel:91234567");
   });
 
   it("shows the caregiver quick preview section", () => {

@@ -20,15 +20,23 @@ export function CallPage() {
         </span>
         <div>
           <p className="elder-task-banner-title">只要揀一個人</p>
-          <p className="elder-task-banner-copy">唔使記電話號碼，直接撳名字就得。</p>
+          <p className="elder-task-banner-copy">撳相片或者名字，之後再按打電話。</p>
         </div>
       </section>
       {selectedContact ? (
         <InfoCard title="正在準備打電話">
-          <p className="big-copy">{selectedContact.name}</p>
-          <p>{selectedContact.relationship}</p>
-          <p>{selectedContact.phone}</p>
-          <p className="card-meta">原型示意：正式版會喺呢度接去通話功能。</p>
+          <div className="call-summary-row">
+            <div>
+              <p className="big-copy">{selectedContact.name}</p>
+              <p>{selectedContact.relationship}</p>
+              <p>{selectedContact.phone}</p>
+            </div>
+            <ContactPhoto contact={selectedContact} />
+          </div>
+          <a className="primary-button" href={getCallLink(selectedContact.phone)}>
+            立即打電話
+          </a>
+          <p className="card-meta">會打開你手機的撥號功能。</p>
         </InfoCard>
       ) : null}
       <div className="stack-list">
@@ -40,20 +48,36 @@ export function CallPage() {
             type="button"
             onClick={() => setSelectedContactId(contact.id)}
           >
-            <div className="card-title-with-icon">
-              <span className="mini-icon-badge mini-icon-badge--call">
-                <AppIcon name="person" />
-              </span>
-              <strong>{contact.name}</strong>
+            <div className="call-card-row">
+              <div className="call-card-copy">
+                <strong>{contact.name}</strong>
+                <span>{contact.relationship}</span>
+                <span>{contact.phone}</span>
+                <span className="call-card-note">
+                  {selectedContactId === contact.id ? "已選擇，按下面就打電話" : "按一下就聯絡家人"}
+                </span>
+              </div>
+              <ContactPhoto contact={contact} />
             </div>
-            <span>{contact.relationship}</span>
-            <span>{contact.phone}</span>
-            <span className="call-card-note">
-              {selectedContactId === contact.id ? "已選擇，準備打電話" : "按一下就聯絡家人"}
-            </span>
           </button>
         ))}
       </div>
     </AppShell>
   );
+}
+
+function ContactPhoto({ contact }: { contact: { name: string; photoDataUrl?: string } }) {
+  if (contact.photoDataUrl) {
+    return (
+      <span className="contact-photo contact-photo--image">
+        <img alt={`${contact.name} 照片`} src={contact.photoDataUrl} />
+      </span>
+    );
+  }
+
+  return <span className="contact-photo">{contact.name.slice(0, 1) || "人"}</span>;
+}
+
+function getCallLink(phone: string) {
+  return `tel:${phone.replace(/[^\d+]/g, "")}`;
 }

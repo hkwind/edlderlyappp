@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { CallPage } from "../features/calling/CallPage";
+import { CaregiverContactsPage } from "../features/caregiver/CaregiverContactsPage";
 import { CaregiverDashboardPage } from "../features/caregiver/CaregiverDashboardPage";
 import { CaregiverDestinationsPage } from "../features/caregiver/CaregiverDestinationsPage";
 import { CustomActionPage } from "../features/custom-grid/CustomActionPage";
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
   {
     path: "/caregiver/destinations",
     element: <CaregiverDestinationsPage />
+  },
+  {
+    path: "/caregiver/contacts",
+    element: <CaregiverContactsPage />
   },
   {
     path: "/caregiver/medicine",

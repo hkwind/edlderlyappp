@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
+import { CaregiverContactsPage } from "../src/features/caregiver/CaregiverContactsPage";
 import { CaregiverDestinationsPage } from "../src/features/caregiver/CaregiverDestinationsPage";
 import { CaregiverCustomSlotsPage } from "../src/features/custom-grid/CaregiverCustomSlotsPage";
 import { CaregiverMedicinePage } from "../src/features/medicine/CaregiverMedicinePage";
@@ -25,6 +26,14 @@ describe("Caregiver edit pages", () => {
 
     expect(screen.getByText("管理地點")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "儲存地點" })).toBeInTheDocument();
+  });
+
+  it("renders the contacts editor", () => {
+    render(<CaregiverContactsPage />, { wrapper: Wrapper });
+
+    expect(screen.getByText("管理聯絡人")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "儲存聯絡人" })).toBeInTheDocument();
+    expect(screen.getByText("上載照片")).toBeInTheDocument();
   });
 
   it("renders the medicine editor with alert controls", () => {

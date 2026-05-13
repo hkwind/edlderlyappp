@@ -26,6 +26,7 @@ export interface Contact {
   relationship: string;
   phone: string;
   priority: number;
+  photoDataUrl?: string;
 }
 
 export interface Destination {
